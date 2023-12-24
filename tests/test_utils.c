@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "Unity/src/unity.h"
+#include "../Unity/src/unity.h"
 
 char *url_decode(const char *src);
 const char *get_file_extension(const char *file_name);

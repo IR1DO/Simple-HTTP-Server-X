@@ -12,7 +12,7 @@
 #include <stddef.h>
 #include <arpa/inet.h>
 
-#include "Unity/src/unity.h"
+#include "../Unity/src/unity.h"
 
 #define PORT 8080
 #define BUFFER_SIZE (5 * 1024 * 1024)
