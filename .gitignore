@@ -1,2 +1,7 @@
-/build/
+build/
 httpServer
+.vscode/
+
+# Ignore test files not ending with .c
+test_*
+!test_*.c

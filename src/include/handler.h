@@ -3,8 +3,7 @@
 
 #include <stddef.h>
 
-void *
-handle_client(void *arg);
-void build_http_response(const char *file_name, const char *file_ext, char *response, size_t *response_len);
+void *handle_client(void *arg);
+int build_http_response(const char *file_name, const char *file_ext, char *response, size_t *response_len, char *pathToFiles);
 
 #endif

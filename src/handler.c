@@ -1,4 +1,3 @@
-#include "include/handler.h"
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -47,7 +46,7 @@ void *handle_client(void *arg)
             // Build HTTP response
             char *response = (char *)malloc(BUFFER_SIZE * sizeof(char));
             size_t response_len;
-            build_http_response(file_name, file_ext, response, &response_len);
+            build_http_response(file_name, file_ext, response, &response_len, "html");
 
             // Send HTTP response to client
             send(client_fd, response, response_len, 0);
@@ -63,14 +62,15 @@ void *handle_client(void *arg)
     return NULL;
 }
 
-void build_http_response(const char *file_name,
-                         const char *file_ext,
-                         char *response,
-                         size_t *response_len)
+int build_http_response(const char *file_name,
+                        const char *file_ext,
+                        char *response,
+                        size_t *response_len,
+                        char *pathToFiles)
 {
     // Response is 404 Not Found if file don't exist
     char path[128];
-    snprintf(path, sizeof(path), "html/%s", file_name);
+    snprintf(path, sizeof(path), "%s/%s", pathToFiles, file_name);
     int file_fd = open(path, O_RDONLY);
     if (file_fd == -1)
     {
@@ -80,7 +80,7 @@ void build_http_response(const char *file_name,
                  "\r\n"
                  "404 Not Found");
         *response_len = strlen(response);
-        return;
+        return 404;
     }
 
     // Get file size for Content-Length
@@ -113,4 +113,5 @@ void build_http_response(const char *file_name,
     }
     free(header);
     close(file_fd);
+    return 200;
 }

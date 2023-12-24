@@ -13,13 +13,13 @@
 #include "include/handler.h"
 #include "include/utils.h"
 
-void setup_server_socket(int *server_fd, struct sockaddr_in *server_addr)
+int setup_server_socket(int *server_fd, struct sockaddr_in *server_addr, int implicit)
 {
     // Create server socket
     if ((*server_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
         perror("socket failed");
-        exit(EXIT_FAILURE);
+        return -1;
     }
 
     // Config socket
@@ -33,20 +33,25 @@ void setup_server_socket(int *server_fd, struct sockaddr_in *server_addr)
              sizeof(*server_addr)) < 0)
     {
         perror("bind failed");
-        exit(EXIT_FAILURE);
+        return -1;
     }
 
     // Listen for connections
     if (listen(*server_fd, 10) < 0)
     {
         perror("listen failed");
-        exit(EXIT_FAILURE);
+        return -1;
     }
 
-    printf("Server listening on port %d\n", PORT);
+    if (!implicit)
+    {
+        printf("Server listening on port %d\n", PORT);
+    }
+
+    return 0;
 }
 
-void run_server(int server_fd)
+int run_server(int server_fd)
 {
     struct sockaddr_in client_addr;
     socklen_t client_addr_len = sizeof(client_addr);
@@ -59,11 +64,13 @@ void run_server(int server_fd)
     {
 
         perror("accept failed");
-        return;
+        return -1;
     }
 
     // Create a new thread to handle client request
     pthread_t thread_id;
     pthread_create(&thread_id, NULL, handle_client, (void *)client_fd);
     pthread_detach(thread_id);
+
+    return 0;
 }

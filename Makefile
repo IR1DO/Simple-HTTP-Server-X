@@ -14,7 +14,7 @@ httpServer: $(OBJ_DIR)/main.o $(OBJ_DIR)/server.o $(OBJ_DIR)/handler.o $(OBJ_DIR
 	$(CC) $(CFLAGS) -o httpServer $(OBJ_DIR)/main.o $(OBJ_DIR)/server.o $(OBJ_DIR)/handler.o $(OBJ_DIR)/utils.o
 
 # Targets: main.o, depends on main.c
-$(OBJ_DIR)/main.o: $(SRC_DIR)/main.c
+$(OBJ_DIR)/main.o: $(SRC_DIR)/main.c $(INCLUDE_DIR)/server.h
 	$(CC) $(CFLAGS) -c $< -I$(INCLUDE_DIR) -o $@
 
 # Targets: server.o, depends on server.c, server.h, handler.h and utils.h
