@@ -22,6 +22,15 @@ int setup_server_socket(int *server_fd, struct sockaddr_in *server_addr, int imp
         return -1;
     }
 
+    // Add SO_REUSEADDR to the socket config
+    int reuse = 1;
+    if (setsockopt(*server_fd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse)) == -1)
+    {
+        perror("Setsockopt failed");
+        close(*server_fd);
+        exit(EXIT_FAILURE);
+    }
+
     // Config socket
     server_addr->sin_family = AF_INET;
     server_addr->sin_addr.s_addr = INADDR_ANY;
