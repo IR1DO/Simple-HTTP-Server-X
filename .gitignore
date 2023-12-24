@@ -1,6 +1,7 @@
 build/
 httpServer
 .vscode/
+html/
 
 # Ignore test files not ending with .c
 test_*
