@@ -1,7 +1,7 @@
 build/
 httpServer
 .vscode/
-html/
+static/
 
 # Ignore test files not ending with .c
 test_*
