@@ -57,7 +57,7 @@ void test_build_response(void)
 {
     char *response = (char *)malloc(BUFFER_SIZE * sizeof(char));
     size_t response_len;
-    char *pathToFiles = "html";
+    char *pathToFiles = "static";
 
     TEST_ASSERT_EQUAL_INT(200, build_http_response("index.html", "html", response, &response_len, pathToFiles));
     TEST_ASSERT_NOT_EQUAL(0, response_len);

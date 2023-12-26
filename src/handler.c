@@ -46,7 +46,7 @@ void *handle_client(void *arg)
             // Build HTTP response
             char *response = (char *)malloc(BUFFER_SIZE * sizeof(char));
             size_t response_len;
-            build_http_response(file_name, file_ext, response, &response_len, "../../html");
+            build_http_response(file_name, file_ext, response, &response_len, "../../static");
 
             // Send HTTP response to client
             send(client_fd, response, response_len, 0);
