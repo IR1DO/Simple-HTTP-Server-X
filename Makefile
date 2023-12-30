@@ -1,16 +1,22 @@
 # Define compiler
 CC = gcc
 
-# Compiler flags
-CFLAGS = -Wall
+# Compiler flags for normal build
+CFLAGS = -Wall -fprofile-arcs -ftest-coverage
+
+# Compiler flags for coverage
+COVERAGE_CFLAGS = -Wall -fprofile-arcs -ftest-coverage
 
 # Source file directory
 SRC_DIR = src
 INCLUDE_DIR = $(SRC_DIR)/include
 TESTS_DIR = tests
 UNITY_DIR = Unity/src
+
+# Output directories
 OBJ_DIR = build
 BIN_DIR = $(OBJ_DIR)/bin
+COV_DIR = coverage
 
 # Unity source files
 UNITY_SRC = $(UNITY_DIR)/unity.c
@@ -73,10 +79,18 @@ $(TEST_SERVER_EXE): $(TEST_SERVER_SRC) | build
 $(TEST_UTILS_EXE): $(TEST_UTILS_SRC) | build
 	$(CC) $(CFLAGS) -o $(TEST_UTILS_EXE) $^ -I$(INCLUDE_DIR) -I$(UNITY_DIR)
 
+# Target to generate coverage report
+coverage: test
+	mkdir -p ${COV_DIR}
+	lcov --capture --directory . --output-file ${COV_DIR}/coverage.info
+	lcov --remove ${COV_DIR}/coverage.info "*/Unity/*" --output-file ${COV_DIR}/coverage.info
+	genhtml ${COV_DIR}/coverage.info --output-directory ${COV_DIR}
+	xdg-open ${COV_DIR}/index.html
+
 # Create build directory
 build:
 	mkdir -p $(OBJ_DIR) $(BIN_DIR)
 
 # Clean target
 clean:
-	rm -rf $(OBJ_DIR) $(BIN_DIR) $(HTTP_SERVER_EXE) $(TEST_HANDLER_EXE) $(TEST_SERVER_EXE) $(TEST_UTILS_EXE)
+	rm -rf $(OBJ_DIR) $(BIN_DIR) $(HTTP_SERVER_EXE) $(TEST_HANDLER_EXE) $(TEST_SERVER_EXE) $(TEST_UTILS_EXE) ${COV_DIR}
